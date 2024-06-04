@@ -38,17 +38,17 @@ const ProductViewPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
-        <div className="lg:flex lg:items-start">
+      <div className="lg:grid lg:grid-cols-6 lg:gap-x-8">
+        <div className="lg:flex lg:items-start col-start-1 col-end-3">
           <Image
             src={product.thumbnail}
             alt={product.title}
-            width={500}
-            height={500}
+            width={300}
+            height={300}
             className="object-cover object-center rounded-lg"
           />
         </div>
-        <div className="mt-8 lg:mt-0">
+        <div className="mt-8 lg:mt-0 col-start-3 col-end-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {product.title}
           </h1>
@@ -61,7 +61,7 @@ const ProductViewPage = () => {
           </p>
           <div className="mt-6">
             <h3 className="text-sm text-gray-600 dark:text-gray-200">Color</h3>
-            <div className="flex items-center mt-2">
+            <div className="flex items-center gap-2 mt-2">
               <span className="w-8 h-8 bg-orange-300 rounded-full cursor-pointer border border-gray-300"></span>
               <span className="w-8 h-8 bg-orange-400 rounded-full cursor-pointer border border-gray-300"></span>
               <span className="w-8 h-8 bg-orange-500 rounded-full cursor-pointer border border-gray-300"></span>
@@ -71,7 +71,7 @@ const ProductViewPage = () => {
           </div>
           <div className="mt-6">
             <h3 className="text-sm text-gray-600 dark:text-gray-200">Size</h3>
-            <div className="flex items-center mt-2">
+            <div className="flex items-center gap-2 mt-2">
               <span className="px-3 py-2 border border-gray-300 rounded-md cursor-pointer">
                 M
               </span>
@@ -171,34 +171,16 @@ const ProductViewPage = () => {
           </div>
           <div className="mt-4 ">
             <div className="grid grid-cols-4 gap-2">
-              <Image
-                src="https://template.hasthemes.com/hurst-v1/hurst/img/single-product/medium/3.jpg" // Replace with your image paths
-                alt="Product image 1"
-                width={150}
-                height={150}
-                className="object-cover object-center rounded-lg"
-              />
-              <Image
-                src="https://template.hasthemes.com/hurst-v1/hurst/img/single-product/medium/3.jpg" // Replace with your image paths
-                alt="Product image 2"
-                width={150}
-                height={150}
-                className="object-cover object-center rounded-lg"
-              />
-              <Image
-                src="https://template.hasthemes.com/hurst-v1/hurst/img/single-product/medium/3.jpg" // Replace with your image paths
-                alt="Product image 3"
-                width={150}
-                height={150}
-                className="object-cover object-center rounded-lg"
-              />
-              <Image
-                src="https://template.hasthemes.com/hurst-v1/hurst/img/single-product/medium/3.jpg" // Replace with your image paths
-                alt="Product image 4"
-                width={150}
-                height={150}
-                className="object-cover object-center rounded-lg"
-              />
+              {product?.gallery?.map((url, i: number) => (
+                <Image
+                  key={i}
+                  src={url} // Replace with your image paths
+                  alt="Product image 1"
+                  width={150}
+                  height={150}
+                  className="object-cover object-center rounded-lg"
+                />
+              ))}
             </div>
           </div>
         </div>

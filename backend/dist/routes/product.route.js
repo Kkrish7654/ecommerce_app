@@ -17,5 +17,9 @@ router.post("/", upload_middleware_1.default.fields([
         name: "thumbnail",
         maxCount: 1,
     },
+    {
+        name: "gallery",
+        maxCount: 8,
+    },
 ]), product_controller_1.default.createProduct);
 exports.default = router;

@@ -34,6 +34,10 @@ class ProductService {
                 }
             }
         }
+        const gallery = [];
+        uploadedImages?.gallery?.map((item) => {
+            gallery.push(item);
+        });
         const query = {
             data: {
                 title: title,
@@ -41,9 +45,15 @@ class ProductService {
                 price: parseInt(price),
                 image: uploadedImages.image[0],
                 thumbnail: uploadedImages.thumbnail[0],
+                gallery: gallery,
+                stocks: {
+                    create: {
+                        quantity: 10,
+                    },
+                },
             },
         };
-        const data = await prisma.products.createMany(query);
+        const data = await prisma.products.create(query);
         return { data: data };
     }
 }

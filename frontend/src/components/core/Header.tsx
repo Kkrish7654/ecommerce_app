@@ -16,6 +16,8 @@ import { RootState } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/reducers/auth.reducer";
 import { useRouter } from "next/navigation";
+import Drawer from "../helper/ui/Drawer";
+import Cart from "../home/segments/Cart";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -30,6 +32,8 @@ const Header = () => {
   const { isAuthenticate } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const [openCart, setOpenCart] = useState<boolean>(false);
   // const [welcomeMsg, setWelcomeMsg] = useState(true);
 
   // function handleWelcomeMsg() {
@@ -45,7 +49,7 @@ const Header = () => {
   }
   return (
     <div className="w-full">
-      <header className="dark:bg-black dark:text-white text-neutral-800 bg-white shadow-md">
+      <header className="dark:bg-black dark:text-white text-neutral-800 bg-white shadow-md z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="text-2xl font-bold">
             <Link href="/">BrandLogo</Link>
@@ -81,6 +85,14 @@ const Header = () => {
                   <NavigationMenuLink>Products</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+              <NavigationMenuItem className="pl-5">
+                <NavigationMenuLink
+                  className=" cursor-pointer"
+                  onClick={() => setOpenCart(!openCart)}
+                >
+                  Cart
+                </NavigationMenuLink>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
@@ -104,6 +116,11 @@ const Header = () => {
           </div>
         </div>
       </header>
+      {openCart && (
+        <Drawer>
+          <Cart />
+        </Drawer>
+      )}
     </div>
   );
 };

@@ -20,7 +20,7 @@ export const Carousel = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="relative w-full min-h-[50vh] overflow-hidden">
+    <div className="relative w-full min-h-[50vh] overflow-hidden z-[-1]">
       <div
         className="flex transition-transform duration-300"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}

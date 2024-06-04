@@ -5,6 +5,7 @@ export type ProductType = {
   price: number;
   image?: string;
   thumbnail: string;
+  gallery?: string[];
 };
 
 export interface ProductProps {

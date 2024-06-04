@@ -11,17 +11,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model products {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  price       Int
-  image       String?
-  thumbnail   String?
-  created_at  DateTime @default(now()) @map("created_at")
-  updated_at  DateTime @updatedAt @map("updated_at")
-}
-
 model users {
   id       Int    @id @default(autoincrement())
   username String
@@ -29,10 +18,43 @@ model users {
   email    String
   password String
 
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt @map("updated_at")
+  created_at DateTime    @default(now()) @map("created_at")
+  updated_at DateTime    @updatedAt @map("updated_at")
+  user_cart  user_cart[]
 }
 
 model user_address {
   id Int @id @default(autoincrement())
+}
+
+model products {
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String
+  price       Int
+  image       String?
+  thumbnail   String?
+  gallery     Json?
+  created_at  DateTime    @default(now()) @map("created_at")
+  updated_at  DateTime    @updatedAt @map("updated_at")
+  stocks      stocks[]
+  user_cart   user_cart[]
+}
+
+model stocks {
+  id              Int      @id @default(autoincrement())
+  product_id      Int
+  quantity        Int
+  transactionDate DateTime @default(now())
+  products        products @relation(fields: [product_id], references: [id])
+}
+
+model user_cart {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  user_id    Int
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+  products   products @relation(fields: [product_id], references: [id])
+  user       users    @relation(fields: [user_id], references: [id])
 }
