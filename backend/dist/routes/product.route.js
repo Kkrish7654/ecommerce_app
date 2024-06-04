@@ -5,7 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const product_controller_1 = __importDefault(require("../controller/product.controller"));
+const upload_middleware_1 = __importDefault(require("../middleware/upload.middleware"));
 const router = (0, express_1.Router)();
 router.get("/", product_controller_1.default.getAllProducts);
-router.post("/", product_controller_1.default.createProduct);
+router.post("/", upload_middleware_1.default.fields([
+    {
+        name: "image",
+        maxCount: 1,
+    },
+    {
+        name: "thumbnail",
+        maxCount: 1,
+    },
+]), product_controller_1.default.createProduct);
 exports.default = router;

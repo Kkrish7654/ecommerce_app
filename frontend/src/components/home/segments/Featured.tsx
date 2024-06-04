@@ -1,9 +1,20 @@
+"use client";
+
 import React from "react";
 import { CardWrapper, ProductCard } from "@/components/helper/ui/CardWrapper";
 import ProductWrapper from "@/components/helper/ui/ProductWrapper";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import Link from "next/link";
+import { slugify } from "@/components/helper/common";
+import { ProductProps } from "@/types";
 
-const Featured = () => {
+const Featured: React.FC<ProductProps> = (props) => {
+  const { user, isAuthenticate } = useSelector(
+    (state: RootState) => state.user
+  );
+
   return (
     <section className="mt-12">
       <ProductWrapper title="Featured Products">
@@ -19,7 +30,7 @@ const Featured = () => {
           }}
         >
           <div className="grid grid-cols-3 gap-4 mt-5 w-full">
-            {[1, 2, 3, 4, 5, 6].map((index) => (
+            {props.data?.map((product, index) => (
               <motion.div
                 key={index}
                 variants={{
@@ -29,13 +40,19 @@ const Featured = () => {
                 transition={{ duration: 0.5 }}
               >
                 <CardWrapper
-                  title={`Iphone 15 pro max ${index}`}
-                  description={`Description for product ${index}`}
+                  title={product.title}
+                  description={product.description}
                 >
-                  <ProductCard
-                    image="https://template.hasthemes.com/hurst-v1/hurst/img/product/5.jpg"
-                    price={50}
-                  />
+                  <Link
+                    href={`/products/${slugify(product.title)}?id=${
+                      product.id
+                    }`}
+                  >
+                    <ProductCard
+                      image={product.image || ""}
+                      price={product.price}
+                    />
+                  </Link>
                 </CardWrapper>
               </motion.div>
             ))}

@@ -3,18 +3,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const product_model_1 = __importDefault(require("../model/product.model"));
+const client_1 = require("@prisma/client");
+const cloudinary_config_1 = __importDefault(require("../cloudinary.config"));
+const prisma = new client_1.PrismaClient();
 class ProductService {
-    static async getAllProducts() {
-        return await product_model_1.default.findAll();
+    static async getAllProducts(req) {
+        const id = Number(req.query.id);
+        if (id !== undefined && id) {
+            return await prisma.products.findFirst({
+                where: {
+                    id: id,
+                },
+            });
+        }
+        else {
+            return await prisma.products.findMany();
+        }
     }
     static async saveProduct(req) {
-        const { name, price } = req.body;
-        const data = await product_model_1.default.create({
-            name: name,
-            price: price,
-        });
-        return data;
+        const { title, description, price } = req.body;
+        const files = req.files;
+        const uploadedImages = {};
+        for (const field in files) {
+            const fieldFiles = files[field];
+            if (fieldFiles) {
+                for (const file of fieldFiles) {
+                    const result = await cloudinary_config_1.default.uploader.upload(file.path);
+                    uploadedImages[field] = uploadedImages[field] || []; // Create array if needed
+                    uploadedImages[field].push(result.secure_url);
+                }
+            }
+        }
+        const query = {
+            data: {
+                title: title,
+                description: description,
+                price: parseInt(price),
+                image: uploadedImages.image[0],
+                thumbnail: uploadedImages.thumbnail[0],
+            },
+        };
+        const data = await prisma.products.createMany(query);
+        return { data: data };
     }
 }
 exports.default = ProductService;

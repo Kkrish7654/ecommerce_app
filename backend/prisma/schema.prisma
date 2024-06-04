@@ -1,0 +1,38 @@
+//!-----------------------------------------------------------------//
+// !Author: Krish
+// !status: Open
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model products {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  price       Int
+  image       String?
+  thumbnail   String?
+  created_at  DateTime @default(now()) @map("created_at")
+  updated_at  DateTime @updatedAt @map("updated_at")
+}
+
+model users {
+  id       Int    @id @default(autoincrement())
+  username String
+  name     String
+  email    String
+  password String
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+model user_address {
+  id Int @id @default(autoincrement())
+}

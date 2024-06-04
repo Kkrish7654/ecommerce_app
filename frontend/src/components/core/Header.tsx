@@ -6,13 +6,16 @@ import { Button } from "../ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/reducers/auth.reducer";
+import { useRouter } from "next/navigation";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -24,23 +27,24 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 const Header = () => {
-  const [welcomeMsg, setWelcomeMsg] = useState(true);
+  const { isAuthenticate } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  // const [welcomeMsg, setWelcomeMsg] = useState(true);
 
-  function handleWelcomeMsg() {
-    setTimeout(() => {
-      setWelcomeMsg(false);
-    }, 4000);
+  // function handleWelcomeMsg() {
+  //   setTimeout(() => {
+  //     setWelcomeMsg(false);
+  //   }, 4000);
+  // }
+  // handleWelcomeMsg();
+
+  function handleLogout() {
+    dispatch(logout());
+    window.location.reload();
   }
-  handleWelcomeMsg();
   return (
     <div className="w-full">
-      {/* <header
-        className={`${
-          welcomeMsg ? "h-12" : "h-0 opacity-0"
-        } duration-600 flex items-center justify-center w-full dark:bg-gray-800 border-b border-gray-400 dark:text-white text-neutral-800 bg-white shadow-md transition-all`}
-      >
-        <p>Welcome to SmartBazaar!</p>
-      </header> */}
       <header className="dark:bg-black dark:text-white text-neutral-800 bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="text-2xl font-bold">
@@ -74,16 +78,28 @@ const Header = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link href="/products" legacyBehavior passHref>
-                  <NavigationMenuLink>
-                    Products
-                  </NavigationMenuLink>
+                  <NavigationMenuLink>Products</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
           <div className="flex items-center gap-8">
-            <Button variant="outline">Sign Up</Button>
+            {isAuthenticate ? (
+              <>
+                <Button variant="outline">
+                  <Link href="/profile">Profile</Link>
+                </Button>
+
+                <Button onClick={handleLogout} variant="destructive">
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Link href="/login">
+                <Button variant="outline">Sign Up</Button>
+              </Link>
+            )}
             <ThemeSwitch />
           </div>
         </div>

@@ -1,56 +1,34 @@
-"use client";
+import React from "react";
 
-import React, { useState } from "react";
-import Featured from "./segments/Featured";
+import { Carousel, CarouselItem } from "@/components/helper/Features/Carousel";
+import dynamic from "next/dynamic";
+import axios from "@/lib/axiosConfig";
 
-const Carousel = ({ children }: { children: React.ReactNode }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+async function getData() {
+  try {
+    const res = await axios({
+      url: "/products",
+      method: "GET",
+    });
 
-  const next = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex + 1) % React.Children.count(children)
-    );
-  };
+    const data = res?.data;
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
 
-  const prev = () => {
-    setCurrentIndex(
-      (prevIndex) =>
-        (prevIndex - 1 + React.Children.count(children)) %
-        React.Children.count(children)
-    );
-  };
+const Home = async () => {
+  const data = await getData();
 
-  return (
-    <div className="relative w-full min-h-[50vh] overflow-hidden">
-      <div
-        className="flex transition-transform duration-300"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
-        {React.Children.map(children, (child, index) => (
-          <div className="w-full flex-shrink-0">{child}</div>
-        ))}
-      </div>
-      <button
-        className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black px-2 py-1"
-        onClick={prev}
-      >
-        Prev
-      </button>
-      <button
-        className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white text-black px-2 py-1"
-        onClick={next}
-      >
-        Next
-      </button>
-    </div>
-  );
-};
+  if (!data) {
+    return <span>No data found</span>;
+  }
 
-const CarouselItem = ({ children }: { children: React.ReactNode }) => {
-  return <div className="w-full h-full">{children}</div>;
-};
+  const Featured = dynamic(() => import("./segments/Featured"), {
+    loading: () => <span>Loading</span>,
+  });
 
-const Home = () => {
   return (
     <main className=" w-full h-full flex flex-col items-center justify-center">
       <Carousel>
@@ -71,7 +49,7 @@ const Home = () => {
         </CarouselItem>
       </Carousel>
 
-      <section>{<Featured />}</section>
+      <section>{<Featured data={data?.data} />}</section>
     </main>
   );
 };
