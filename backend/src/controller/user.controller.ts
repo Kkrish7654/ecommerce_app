@@ -39,7 +39,36 @@ class UserController {
       return sendResponse(201, "Login Succesfully", data, res);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
-      1;
+    }
+  }
+
+  static async addItemToCart(req: Request, res: Response) {
+    try {
+      const { product_id, user_id } = req.body;
+      if (!product_id || !user_id) {
+        return res.json({ message: "Something is missing?" });
+      }
+
+      const data: any = await UserService.userAddItemToCart(req);
+
+      if (data.error === "OUT_OF_STOCK") {
+        return res.status(404).json({
+          message: "Oops! Item out of stock",
+        });
+      }
+
+      if (data?.status === 404) {
+        return sendResponse(
+          data?.status,
+          "Oops! Failed to Add Item To Cart!",
+          data,
+          res
+        );
+      }
+
+      return sendResponse(201, "Item Added Successfully", data, res);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   }
 }

@@ -19,7 +19,7 @@ class ProductService {
   }
 
   static async saveProduct(req: Request) {
-    const { title, description, price } = req.body;
+    const { title, description, price, quantity } = req.body;
 
     const files: any = req.files;
     const uploadedImages: any = {};
@@ -28,7 +28,7 @@ class ProductService {
       if (fieldFiles) {
         for (const file of fieldFiles) {
           const result = await cloudinary.uploader.upload(file.path);
-          uploadedImages[field] = uploadedImages[field] || []; // Create array if needed
+          uploadedImages[field] = uploadedImages[field] || [];
           uploadedImages[field].push(result.secure_url);
         }
       }
@@ -49,7 +49,7 @@ class ProductService {
         gallery: gallery,
         stocks: {
           create: {
-            quantity: 10,
+            quantity: parseInt(quantity),
           },
         },
       },
