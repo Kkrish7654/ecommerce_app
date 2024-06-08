@@ -24,5 +24,6 @@ router.post(
   ]),
   ProductController.createProduct
 );
+router.post("/add-cart", requireAuth, ProductController.addItemToCart);
 
 export default router;

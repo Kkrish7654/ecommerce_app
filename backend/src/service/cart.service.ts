@@ -29,6 +29,7 @@ class CartService {
 
   async updateItem(user_id: number, product_id: number, quantity: number) {
     // TODO -> IF ITEM ALREADY EXIST INCREASE "QUANTITY"
+
     const query: Prisma.user_cartUpdateManyArgs = {
       data: {
         quantity: quantity,
@@ -43,7 +44,7 @@ class CartService {
     return data;
   }
 
-  async deleteItem(user_id: number, product_id: number, quantity: number) {
+  async deleteItem(user_id: number, product_id: number) {
     const query: Prisma.user_cartDeleteManyArgs = {
       where: {
         user_id: user_id,

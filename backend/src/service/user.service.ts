@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import CartService from "./cart.service";
+
 const prisma = new PrismaClient();
 
-const cart = new CartService();
+
 class UserService {
   static async userCreate(req: Request, res: Response) {
     const { username, name, email, password } = req.body;
@@ -77,12 +77,6 @@ class UserService {
     } else {
       return { message: "user not found" };
     }
-  }
-
-  static async userAddItemToCart(req: Request) {
-    const { product_id, user_id, quantity } = req.body;
-    const data = await cart.addItem(user_id, product_id, quantity);
-    return data;
   }
 }
 

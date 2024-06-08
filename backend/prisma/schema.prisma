@@ -21,6 +21,7 @@ model users {
   created_at DateTime    @default(now()) @map("created_at")
   updated_at DateTime    @updatedAt @map("updated_at")
   user_cart  user_cart[]
+  orders     orders[]
 }
 
 model user_address {
@@ -30,6 +31,7 @@ model user_address {
 model products {
   id          Int           @id @default(autoincrement())
   title       String
+  content     Json?
   description String
   price       Int
   image       String?
@@ -40,11 +42,12 @@ model products {
   created_at  DateTime      @default(now()) @map("created_at")
   updated_at  DateTime      @updatedAt @map("updated_at")
   transaction transaction[]
+  order_items order_items[]
+  discounts   discounts[]
 }
 
 model stocks {
-  id              Int      @id @default(autoincrement())
-  product_id      Int
+  product_id      Int      @id
   quantity        Int
   transactionDate DateTime @default(now())
   products        products @relation(fields: [product_id], references: [id])
@@ -60,6 +63,38 @@ model transaction {
   transactionDate  DateTime         @default(now())
   product          products         @relation(fields: [product_id], references: [id])
   created_at       DateTime         @default(now()) @map("created_at")
+}
+
+model orders {
+  id           Int           @id @default(autoincrement())
+  user_id      Int
+  total_amount Int
+  status       order_status
+  user         users         @relation(fields: [user_id], references: [id])
+  created_at   DateTime      @default(now()) @map("created_at")
+  updated_at   DateTime      @updatedAt @map("updated_at")
+  order_items  order_items[]
+}
+
+model order_items {
+  id         Int      @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  quantity   Int
+  price      Int
+  total      Int
+  order      orders   @relation(fields: [order_id], references: [id])
+  product    products @relation(fields: [product_id], references: [id])
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+enum order_status {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
 enum transaction_type {
@@ -78,4 +113,16 @@ model user_cart {
   user       users    @relation(fields: [user_id], references: [id])
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
+}
+
+model discounts {
+  id               Int      @id @default(autoincrement())
+  product_id       Int
+  discount         Int
+  start_date       DateTime
+  end_date         DateTime
+  customer_segment String
+  products         products @relation(fields: [product_id], references: [id])
+  created_at       DateTime @default(now()) @map("created_at")
+  updated_at       DateTime @updatedAt @map("updated_at")
 }

@@ -39,26 +39,5 @@ class UserController {
             res.status(500).json({ message: error.message });
         }
     }
-    static async addItemToCart(req, res) {
-        try {
-            const { product_id, user_id } = req.body;
-            if (!product_id || !user_id) {
-                return res.json({ message: "Something is missing?" });
-            }
-            const data = await user_service_1.default.userAddItemToCart(req);
-            if (data.error === "OUT_OF_STOCK") {
-                return res.status(404).json({
-                    message: "Oops! Item out of stock",
-                });
-            }
-            if (data?.status === 404) {
-                return (0, response_1.sendResponse)(data?.status, "Oops! Failed to Add Item To Cart!", data, res);
-            }
-            return (0, response_1.sendResponse)(201, "Item Added Successfully", data, res);
-        }
-        catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    }
 }
 exports.default = UserController;

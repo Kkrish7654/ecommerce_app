@@ -6,9 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const cart_service_1 = __importDefault(require("./cart.service"));
 const prisma = new client_1.PrismaClient();
-const cart = new cart_service_1.default();
 class UserService {
     static async userCreate(req, res) {
         const { username, name, email, password } = req.body;
@@ -70,11 +68,6 @@ class UserService {
         else {
             return { message: "user not found" };
         }
-    }
-    static async userAddItemToCart(req) {
-        const { product_id, user_id, quantity } = req.body;
-        const data = await cart.addItem(user_id, product_id, quantity);
-        return data;
     }
 }
 exports.default = UserService;

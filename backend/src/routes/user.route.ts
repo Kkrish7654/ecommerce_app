@@ -6,6 +6,5 @@ const router = Router();
 
 router.post("/register", UserController.createUser);
 router.post("/login", UserController.loginUser);
-router.post("/add-cart", requireAuth, UserController.addItemToCart);
 
 export default router;

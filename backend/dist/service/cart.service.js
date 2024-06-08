@@ -36,7 +36,7 @@ class CartService {
         const data = await prisma.user_cart.updateMany(query);
         return data;
     }
-    async deleteItem(user_id, product_id, quantity) {
+    async deleteItem(user_id, product_id) {
         const query = {
             where: {
                 user_id: user_id,

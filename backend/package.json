@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/"
   },
   "keywords": [],
   "author": "",
@@ -28,16 +29,16 @@
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.4.0",
     "@types/body-parser": "^1.19.5",
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.13",
     "@types/sequelize": "^4.28.20",
-    "eslint": "^9.4.0",
-    "globals": "^15.3.0",
+    "globals": "^15.4.0",
     "prisma": "^5.14.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.12.0"
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0"
   }
 }
